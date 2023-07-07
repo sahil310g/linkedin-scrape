@@ -20,7 +20,14 @@ l = st.text_input('Enter LinkedIn Profile to scrape: ')
 links.append(l)
 
 if username and password and l:
-    browser = webdriver.Chrome()
+    # browser = webdriver.Chrome()
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
+    browser = webdriver.Chrome(options=chrome_options)
+
     browser.get('https://www.linkedin.com/login')
 
     elementID = browser.find_element('id','username')
@@ -52,7 +59,7 @@ if username and password and l:
         details = soup.find('div',{'class':'ph5'})
         mutual_connection = details.find('a', {'class':'link-without-hover-visited'})
         # print(mutual_connections)
-        # print('<<<<<<<<<<<<<<------------------------------------------------------------------>>>>>>>')
+
         if mutual_connection:
             mutual_connections = mutual_connection['href'].strip()
             browser.get(mutual_connections)
@@ -63,7 +70,7 @@ if username and password and l:
             connections_links = connections_list.find('ul')
             connections = connections_links.find_all('li')
             # print(connections)
-            # print('<<<<<<<<<<<<<<------------------------------------------------------------------>>>>>>>')
+
             for connection in connections:
                 current_mutual = [] 
                 current_mutual.append(name)
@@ -73,16 +80,16 @@ if username and password and l:
                 profile_detail = profile.find('span',{'class':'entity-result__title-text'})
                 mutual_name_link = profile_detail.find('a', {'class':'app-aware-link'})
                 # print(mutual_name_link)
-                # print('<<<<<<<<<<<<<<------------------------------------------------------------------>>>>>>>')
+
                 name_span = mutual_name_link.find('span',{'aria-hidden':'true'})
                 # print(name_span)
-                # print('<<<<<<<<<<<<<<------------------------------------------------------------------>>>>>>>')
+
                 mutual_name = name_span.get_text().strip()
                 current_mutual.append(mutual_name)
                 current_mutual.append(mutual_name_link['href'].strip())
 
                 # print(mutual_name)
-                # print('<<<<<<<<<<<<<<------------------------------------------------------------------>>>>>>>')
+
                 all_mutual.append(current_mutual)
 
     print(all_mutual)
