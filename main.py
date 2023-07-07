@@ -1,8 +1,11 @@
+import sys
 import requests, time, random
 from bs4 import BeautifulSoup
 from selenium import webdriver  
 import streamlit as st
 import csv
+import os
+import psutil
 
 
 st.set_page_config(page_title = 'LinkedIn Manager')
@@ -90,6 +93,10 @@ if username and password and l:
     st.subheader('Download csv file:')
     with open('mutual_contacts.csv', 'rb') as f:
         st.download_button('Download CSV', f, file_name='contacts.csv')
-    username = ''
-    password = ''
-    links = []
+
+exit_app = st.sidebar.button("Shut Down")
+if exit_app:
+    time.sleep(5)
+    pid = os.getpid()
+    p = psutil.Process(pid)
+    p.terminate()
