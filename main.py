@@ -90,4 +90,6 @@ if username and password and l:
     st.subheader('Download csv file:')
     with open('mutual_contacts.csv', 'rb') as f:
         st.download_button('Download CSV', f, file_name='contacts.csv')
-
+    username = ''
+    password = ''
+    links = []
